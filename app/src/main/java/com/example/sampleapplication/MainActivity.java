@@ -1,20 +1,27 @@
 package com.example.sampleapplication;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -31,6 +38,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.opencsv.CSVWriter;
 
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +56,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.UUID;
 
 @RequiresApi(api = Build.VERSION_CODES.R)
 public class MainActivity extends AppCompatActivity {
@@ -57,7 +69,23 @@ public class MainActivity extends AppCompatActivity {
     EditText param5_Value;
     EditText param6_Value;
     String formattedDate;
+    boolean UploadCompleted = false ;
     Random random = new Random();
+    // views for button
+    private Button btnSelect, btnUpload;
+
+    // view for image view
+    private ImageView imageView;
+
+    // Uri indicates, where the image will be picked from
+    private Uri filePath;
+
+    // request code
+    private final int PICK_IMAGE_REQUEST = 22;
+
+    // instance for firebase storage and StorageReference
+    FirebaseStorage storage;
+    StorageReference storageReference;
     int ListLength;
             //String csv = "/storage/emulated/0/Download/A/MyCsvFile.csv";
     String csv = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Download/A/MyCsvFile.csv";
@@ -75,6 +103,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(permissionIntent);
             }
         }
+        // get the Firebase  storage reference
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -91,7 +122,9 @@ public class MainActivity extends AppCompatActivity {
         Button sendbutton = (Button) findViewById(R.id.button_send);
         //generate file Button
         Button filegeneratebutton = (Button) findViewById(R.id.FileGenerate_Button);
+        btnSelect = findViewById(R.id.btnChoose);
 
+        imageView = findViewById(R.id.imgView);
         param1_Value = findViewById(R.id.Param_1);
         param2_Value = findViewById(R.id.Param_2);
         param3_Value = findViewById(R.id.Param_3);
@@ -103,55 +136,22 @@ public class MainActivity extends AppCompatActivity {
         //set file path to text view to find the file location
         TextView file_path_Value = findViewById(R.id.file_Path);
         file_path_Value.setText("File will be stored at "+csv);
+        btnSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                SelectImage();
+            }
+
+        });
 
         //set onclick listner to save data button
         sendbutton.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
-            {//once that button click data in those files will be assign to string variables
-                String param1_Value_str = param1_Value.getText().toString();
-                String param2_Value_str = param2_Value.getText().toString();
-                String param3_Value_str = param3_Value.getText().toString();
-                String param4_Value_str = param4_Value.getText().toString();
-                String param5_Value_str = param5_Value.getText().toString();
-                String param6_Value_str = param6_Value.getText().toString();
+            {   uploadImage();
 
-                //Firebase connection
-                //Initial Connection Shoculd be done via Tool > Firebase
-                //Database Instance
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                //Referance to data set
-                //Data is stored like this
-                // XXXXXX
-                //    - ResearchData
-                //          - 21-10-2021 --------> Child(formattedDate)
-                //               - Parameter 1   --------> Child(Parameter 1)
-                //               - Parameter 2   --------> Child(Parameter 2)
-                //               - Parameter 3
-                //               - Parameter 4
-                //               - Parameter 5
-                //               - Parameter 6
-                //          - 22-10-2021 --------> Child(formattedDate)
-                //               - Parameter 1  --------> Child(Parameter 1)
-                //               - Parameter 2  --------> Child(Parameter 2)
-                //               - Parameter 3
-                //               - Parameter 4
-                //               - Parameter 5
-                //               - Parameter 6
 
-                DatabaseReference myRef = database.getReference("ResearchData");
-                try {
-                    myRef.child(formattedDate).child("Parameter 1").push().setValue(param1_Value_str);
-                    myRef.child(formattedDate).child("Parameter 2").push().setValue(param2_Value_str);
-                    myRef.child(formattedDate).child("Parameter 3").push().setValue(param3_Value_str);
-                    myRef.child(formattedDate).child("Parameter 4").push().setValue(param4_Value_str);
-                    myRef.child(formattedDate).child("Parameter 5").push().setValue(param5_Value_str);
-                    myRef.child(formattedDate).child("Parameter 6").push().setValue(param6_Value_str);
-                    setRandomValues();
-
-                }catch(Exception e){
-                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
-                }
 
             }
         });
@@ -332,6 +332,181 @@ public class MainActivity extends AppCompatActivity {
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(MainActivity.this,
                     "There is no email client installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+    // Select Image method
+    private void SelectImage()
+    {
+
+        // Defining Implicit Intent to mobile gallery
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(
+                Intent.createChooser(
+                        intent,
+                        "Select Image from here..."),
+                PICK_IMAGE_REQUEST);
+    }
+
+    // Override onActivityResult method
+    @Override
+    protected void onActivityResult(int requestCode,
+                                    int resultCode,
+                                    Intent data)
+    {
+
+        super.onActivityResult(requestCode,
+                resultCode,
+                data);
+
+        // checking request code and result code
+        // if request code is PICK_IMAGE_REQUEST and
+        // resultCode is RESULT_OK
+        // then set image in the image view
+        if (requestCode == PICK_IMAGE_REQUEST
+                && resultCode == RESULT_OK
+                && data != null
+                && data.getData() != null) {
+
+            // Get the Uri of data
+            filePath = data.getData();
+            try {
+
+                // Setting image on image view using Bitmap
+                Bitmap bitmap = MediaStore
+                        .Images
+                        .Media
+                        .getBitmap(
+                                getContentResolver(),
+                                filePath);
+                imageView.setImageBitmap(bitmap);
+            }
+
+            catch (IOException e) {
+                // Log the exception
+                e.printStackTrace();
+            }
+        }
+    }
+    // UploadImage method
+    private void uploadImage()
+    {
+        if (filePath != null) {
+
+            // Code for showing progressDialog while uploading
+            ProgressDialog progressDialog
+                    = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            // Defining the child of storageReference
+            StorageReference ref
+                    = storageReference
+                    .child(
+                            "images/"
+                                    + UUID.randomUUID().toString());
+
+            // adding listeners on upload
+            // or failure of image
+            ref.putFile(filePath)
+                    .addOnSuccessListener(
+                            new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+                                @Override
+                                public void onSuccess(
+                                        UploadTask.TaskSnapshot taskSnapshot)
+                                {
+                                    Task<Uri> downloadUrl = ref.getDownloadUrl();
+                                    while(!downloadUrl.isComplete());
+                                    Uri url = downloadUrl.getResult();
+                                    // Image uploaded successfully
+                                    // Dismiss dialog
+                                    progressDialog.dismiss();
+                                    Toast
+                                            .makeText(MainActivity.this,
+                                                    "Image Uploaded to "+url,
+                                                    Toast.LENGTH_LONG)
+                                            .show();
+                                    //once that button click data in those files will be assign to string variables
+                                    String param1_Value_str = param1_Value.getText().toString();
+                                    String param2_Value_str = param2_Value.getText().toString();
+                                    String param3_Value_str = param3_Value.getText().toString();
+                                    String param4_Value_str = param4_Value.getText().toString();
+                                    String param5_Value_str = param5_Value.getText().toString();
+                                    String param6_Value_str = url.toString();
+                                    param6_Value.setText(param6_Value_str);
+                                    //Firebase connection
+                                    //Initial Connection Shoculd be done via Tool > Firebase
+                                    //Database Instance
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    //Referance to data set
+                                    //Data is stored like this
+                                    // XXXXXX
+                                    //    - ResearchData
+                                    //          - 21-10-2021 --------> Child(formattedDate)
+                                    //               - Parameter 1   --------> Child(Parameter 1)
+                                    //               - Parameter 2   --------> Child(Parameter 2)
+                                    //               - Parameter 3
+                                    //               - Parameter 4
+                                    //               - Parameter 5
+                                    //               - Parameter 6
+                                    //          - 22-10-2021 --------> Child(formattedDate)
+                                    //               - Parameter 1  --------> Child(Parameter 1)
+                                    //               - Parameter 2  --------> Child(Parameter 2)
+                                    //               - Parameter 3
+                                    //               - Parameter 4
+                                    //               - Parameter 5
+                                    //               - Parameter 6
+
+                                    DatabaseReference myRef = database.getReference("ResearchData");
+                                    try {
+                                        myRef.child(formattedDate).child("Parameter 1").push().setValue(param1_Value_str);
+                                        myRef.child(formattedDate).child("Parameter 2").push().setValue(param2_Value_str);
+                                        myRef.child(formattedDate).child("Parameter 3").push().setValue(param3_Value_str);
+                                        myRef.child(formattedDate).child("Parameter 4").push().setValue(param4_Value_str);
+                                        myRef.child(formattedDate).child("Parameter 5").push().setValue(param5_Value_str);
+                                        myRef.child(formattedDate).child("Parameter 6").push().setValue(param6_Value_str);
+                                        setRandomValues();
+
+                                    }catch(Exception e){
+                                        Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            })
+
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e)
+                        {
+
+                            // Error, Image not uploaded
+                            progressDialog.dismiss();
+                            Toast
+                                    .makeText(MainActivity.this,
+                                            "Failed " + e.getMessage(),
+                                            Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    })
+                    .addOnProgressListener(
+                            new OnProgressListener<UploadTask.TaskSnapshot>() {
+
+                                // Progress Listener for loading
+                                // percentage on the dialog box
+                                @Override
+                                public void onProgress(
+                                        UploadTask.TaskSnapshot taskSnapshot)
+                                {
+                                    double progress
+                                            = (100.0
+                                            * taskSnapshot.getBytesTransferred()
+                                            / taskSnapshot.getTotalByteCount());
+                                    progressDialog.setMessage(
+                                            "Uploaded "
+                                                    + (int)progress + "%");
+                                }
+                            });
         }
     }
 }

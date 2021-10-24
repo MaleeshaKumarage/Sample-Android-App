@@ -143,15 +143,15 @@
 
     <Button
         android:id="@+id/button_send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="45dp"
         android:text="Save Data"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.986"
+        app:layout_constraintHorizontal_bias="0.972"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Param_6"
-        app:layout_constraintVertical_bias="0.287" />
+        app:layout_constraintVertical_bias="0.102" />
 
     <EditText
         android:id="@+id/Param_1"
@@ -231,5 +231,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/FileGenerate_Button"
         app:layout_constraintVertical_bias="0.468" />
+
+    <Button
+        android:id="@+id/btnChoose"
+        android:layout_width="120dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="140dp"
+        android:text="Choose"
+        app:layout_constraintBottom_toTopOf="@+id/FileGenerate_Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Param_6"
+        app:layout_constraintVertical_bias="0.188" />
+
+    <ImageView
+        android:id="@+id/imgView"
+        android:layout_width="128dp"
+        android:layout_height="117dp"
+        android:layout_marginBottom="120dp"
+        app:layout_constraintBottom_toTopOf="@+id/nav_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.031"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/parameter_5"
+        app:layout_constraintVertical_bias="0.88"
+        tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
