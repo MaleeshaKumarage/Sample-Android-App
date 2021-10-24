@@ -1,0 +1,132 @@
+{
+  "ResearchData" : {
+    "21-Oct-2021" : {
+      "Parameter 1" : {
+        "-MmkCGXT1TgnyHtmXHgA" : "Day-1 : Parameter 1  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ4" : "Day-1 : Parameter 1  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILS" : "Day-1 : Parameter 1  : Data 3"
+      },
+      "Parameter 2" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-1 : Parameter 2  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-1 : Parameter 2  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-1 : Parameter 2  : Data 83"
+      },
+      "Parameter 3" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-1 : Parameter 3  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-1 : Parameter 3  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-1 : Parameter 3  : Data 3"
+      },
+      "Parameter 4" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-1 : Parameter 4  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-1 : Parameter 4  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-1 : Parameter 4  : Data 3"
+      },
+      "Parameter 5" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-1 : Parameter 5  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-1 : Parameter 5  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-1 : Parameter 5  : Data 3"
+      },
+      "Parameter 6" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-1 : Parameter 6  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-1 : Parameter 6  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-1 : Parameter 6  : Data 3"
+      }
+    },
+    "22-Oct-2021" : {
+      "Parameter 1" : {
+        "-MmkCGXT1TgnyHtmXHgA" : "Day-2 : Parameter 1  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ4" : "Day-2 : Parameter 1  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILS" : "Day-2 : Parameter 1  : Data 3"
+      },
+      "Parameter 2" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-2 : Parameter 2  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-2 : Parameter 2  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-2 : Parameter 2  : Data 83"
+      },
+      "Parameter 3" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-2 : Parameter 3  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-2 : Parameter 3  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-2 : Parameter 3  : Data 3"
+      },
+      "Parameter 4" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-2 : Parameter 4  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-2 : Parameter 4  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-2 : Parameter 4  : Data 3"
+      },
+      "Parameter 5" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-2 : Parameter 5  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-2 : Parameter 5  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-2 : Parameter 5  : Data 3"
+      },
+      "Parameter 6" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-2 : Parameter 6  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-2 : Parameter 6  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-2 : Parameter 6  : Data 3"
+      }
+    },
+    "23-Oct-2021" : {
+      "Parameter 1" : {
+        "-MmkCGXT1TgnyHtmXHgA" : "Day-3 : Parameter 1  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ4" : "Day-3 : Parameter 1  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILS" : "Day-3 : Parameter 1  : Data 3"
+      },
+      "Parameter 2" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-3 : Parameter 2  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-3 : Parameter 2  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-3 : Parameter 2  : Data 83"
+      },
+      "Parameter 3" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-3 : Parameter 3  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-3 : Parameter 3  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-3 : Parameter 3  : Data 3"
+      },
+      "Parameter 4" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-3 : Parameter 4  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-3 : Parameter 4  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-3 : Parameter 4  : Data 3"
+      },
+      "Parameter 5" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-3 : Parameter 5  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-3 : Parameter 5  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-3 : Parameter 5  : Data 3"
+      },
+      "Parameter 6" : {
+        "-MmkCGXUEZmHRyHR8xSK" : "Day-3 : Parameter 6  : Data 1",
+        "-MmkCIOcQ3ZkLnpqWJQ5" : "Day-3 : Parameter 6  : Data 2",
+        "-MmkCJvO7ZXnEUG19ILT" : "Day-3 : Parameter 6  : Data 3"
+      }
+    },
+    "24-Oct-2021" : {
+      "Parameter 1" : {
+        "-Mml1OjbXVvHZuwoHIou" : "0.4673798",
+        "-Mml1Pd1uDnhW7x7KS-v" : "0.90882427",
+        "-Mml1RLoPTtVnQ9E-NTj" : "0.78766745"
+      },
+      "Parameter 2" : {
+        "-Mml1OjbXVvHZuwoHIov" : "0.44617152",
+        "-Mml1Pd1uDnhW7x7KS-w" : "0.3795455",
+        "-Mml1RLpNhkZV-AqY2Y3" : "0.3639809"
+      },
+      "Parameter 3" : {
+        "-Mml1OjbXVvHZuwoHIow" : "0.022678435",
+        "-Mml1Pd1uDnhW7x7KS-x" : "0.32668263",
+        "-Mml1RLpNhkZV-AqY2Y4" : "0.29116595"
+      },
+      "Parameter 4" : {
+        "-Mml1OjbXVvHZuwoHIox" : "0.13328397",
+        "-Mml1Pd1uDnhW7x7KS-y" : "0.37078512",
+        "-Mml1RLpNhkZV-AqY2Y5" : "0.78742504"
+      },
+      "Parameter 5" : {
+        "-Mml1OjbXVvHZuwoHIoy" : "0.33906442",
+        "-Mml1Pd1uDnhW7x7KS-z" : "0.99759823",
+        "-Mml1RLpNhkZV-AqY2Y6" : "0.6196317"
+      },
+      "Parameter 6" : {
+        "-Mml1OjbXVvHZuwoHIoz" : "0.9100012",
+        "-Mml1Pd1uDnhW7x7KS0-" : "0.97431475",
+        "-Mml1RLpNhkZV-AqY2Y7" : "0.17517304"
+      }
+    }
+  }
+}

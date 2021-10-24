@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.Settings;
 import android.util.Log;
@@ -57,13 +58,14 @@ public class MainActivity extends AppCompatActivity {
     EditText param6_Value;
     String formattedDate;
     Random random = new Random();
-    //String csv = "/storage/emulated/0/Download/A/MyCsvFile.csv";
+    int ListLength;
+            //String csv = "/storage/emulated/0/Download/A/MyCsvFile.csv";
     String csv = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Download/A/MyCsvFile.csv";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
+        getCurrentDate();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         //Adding all Permission to Application (Will only work with SKD 30 +)
@@ -138,13 +140,19 @@ public class MainActivity extends AppCompatActivity {
                 //               - Parameter 6
 
                 DatabaseReference myRef = database.getReference("ResearchData");
-                myRef.child(formattedDate).child("Parameter 1").push().setValue(param1_Value_str);
-                myRef.child(formattedDate).child("Parameter 2").push().setValue(param2_Value_str);
-                myRef.child(formattedDate).child("Parameter 3").push().setValue(param3_Value_str);
-                myRef.child(formattedDate).child("Parameter 4").push().setValue(param4_Value_str);
-                myRef.child(formattedDate).child("Parameter 5").push().setValue(param5_Value_str);
-                myRef.child(formattedDate).child("Parameter 6").push().setValue(param6_Value_str);
-                setRandomValues();
+                try {
+                    myRef.child(formattedDate).child("Parameter 1").push().setValue(param1_Value_str);
+                    myRef.child(formattedDate).child("Parameter 2").push().setValue(param2_Value_str);
+                    myRef.child(formattedDate).child("Parameter 3").push().setValue(param3_Value_str);
+                    myRef.child(formattedDate).child("Parameter 4").push().setValue(param4_Value_str);
+                    myRef.child(formattedDate).child("Parameter 5").push().setValue(param5_Value_str);
+                    myRef.child(formattedDate).child("Parameter 6").push().setValue(param6_Value_str);
+                    setRandomValues();
+
+                }catch(Exception e){
+                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         //Set onClick Listner to Generate File Button
@@ -157,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
                         new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+
                                 List<String> param1 = new ArrayList<String>();
                                 List<String> param2 = new ArrayList<String>();
                                 List<String> param3 = new ArrayList<String>();
@@ -179,65 +188,75 @@ public class MainActivity extends AppCompatActivity {
                                 for (DataSnapshot dateSnapshot : snapshot.getChildren()) {
                                     //This is used to get the inner child of each child - This will give "Date" List Child Component
 
-                                for (DataSnapshot postSnapshot : dateSnapshot.getChildren()) {
-                                    //This is used to get the inner child of each child - This will give "Parameter- XX" List Child Component
-                                    for (DataSnapshot childValue : postSnapshot.getChildren()) {
-                                    //This is used to get the inner child of each child - This will give each data inside each parameter
+                                    for (DataSnapshot postSnapshot : dateSnapshot.getChildren()) {
+                                        //This is used to get the inner child of each child - This will give "Parameter- XX" List Child Component
+                                        for (DataSnapshot childValue : postSnapshot.getChildren()) {
+                                            //This is used to get the inner child of each child - This will give each data inside each parameter
 
-                                        switch (postSnapshot.getKey()) {
+                                            switch (postSnapshot.getKey()) {
 
-                                            case "Parameter 1":
-                                                //    Toast.makeText(getApplicationContext(), "Param 1"+" "+childValue.getValue().toString(), Toast.LENGTH_SHORT).show();
-                                                param1.add(childValue.getValue().toString());
-                                                //Toast.makeText(getApplicationContext(), dateSnapshot.getKey(), Toast.LENGTH_SHORT).show();
-                                                datelist.add(dateSnapshot.getKey());
-                                                break;
-                                            case "Parameter 2":
-                                                //    Toast.makeText(getApplicationContext(), "Param 2"+" "+childValue.getValue().toString(), Toast.LENGTH_SHORT).show();
-                                                param2.add(childValue.getValue().toString());
+                                                case "Parameter 1":
+                                                    //    Toast.makeText(getApplicationContext(), "Param 1"+" "+childValue.getValue().toString(), Toast.LENGTH_SHORT).show();
+                                                    param1.add(childValue.getValue().toString());
+                                                    //Toast.makeText(getApplicationContext(), dateSnapshot.getKey(), Toast.LENGTH_SHORT).show();
+                                                    datelist.add(dateSnapshot.getKey());
+                                                    break;
+                                                case "Parameter 2":
+                                                    //    Toast.makeText(getApplicationContext(), "Param 2"+" "+childValue.getValue().toString(), Toast.LENGTH_SHORT).show();
+                                                    param2.add(childValue.getValue().toString());
 
-                                                break;
-                                            case "Parameter 3":
-                                                //    Toast.makeText(getApplicationContext(), "Param 2"+" "+childValue.getValue().toString(), Toast.LENGTH_SHORT).show();
-                                                param3.add(childValue.getValue().toString());
+                                                    break;
+                                                case "Parameter 3":
+                                                    //    Toast.makeText(getApplicationContext(), "Param 2"+" "+childValue.getValue().toString(), Toast.LENGTH_SHORT).show();
+                                                    param3.add(childValue.getValue().toString());
 
-                                                break;
-                                            case "Parameter 4":
-                                                //    Toast.makeText(getApplicationContext(), "Param 2"+" "+childValue.getValue().toString(), Toast.LENGTH_SHORT).show();
-                                                param4.add(childValue.getValue().toString());
+                                                    break;
+                                                case "Parameter 4":
+                                                    //    Toast.makeText(getApplicationContext(), "Param 2"+" "+childValue.getValue().toString(), Toast.LENGTH_SHORT).show();
+                                                    param4.add(childValue.getValue().toString());
 
-                                                break;
-                                            case "Parameter 5":
-                                                //    Toast.makeText(getApplicationContext(), "Param 2"+" "+childValue.getValue().toString(), Toast.LENGTH_SHORT).show();
-                                                param5.add(childValue.getValue().toString());
+                                                    break;
+                                                case "Parameter 5":
+                                                    //    Toast.makeText(getApplicationContext(), "Param 2"+" "+childValue.getValue().toString(), Toast.LENGTH_SHORT).show();
+                                                    param5.add(childValue.getValue().toString());
 
-                                                break;
-                                            case "Parameter 6":
-                                                //    Toast.makeText(getApplicationContext(), "Param 2"+" "+childValue.getValue().toString(), Toast.LENGTH_SHORT).show();
-                                                param6.add(childValue.getValue().toString());
+                                                    break;
+                                                case "Parameter 6":
+                                                    //    Toast.makeText(getApplicationContext(), "Param 2"+" "+childValue.getValue().toString(), Toast.LENGTH_SHORT).show();
+                                                    param6.add(childValue.getValue().toString());
 
-                                                break;
+                                                    break;
 
-                                            default:
-                                                Toast.makeText(getApplicationContext(), "Unknown", Toast.LENGTH_SHORT).show();
-                                                break;
+                                                default:
+                                                    Toast.makeText(getApplicationContext(), "Unknown", Toast.LENGTH_SHORT).show();
+                                                    break;
 
+                                            }
                                         }
                                     }
-                                    }
-                                }
-                                //Data will be stored to 7 dimention arry to write in CSV File -7 dimentions (6 for 6 parameters and 1 for date)
-                                for (int i = 0; i < param1.size(); i++) {
-                                    data.add(new String[]{datelist.get(i),param1.get(i),param2.get(i),param3.get(i),param4.get(i),param5.get(i),param6.get(i)});
                                 }
 
+
+                                try{
+                                    ListLength = param6.size();
+                                //Data will be stored to 7 dimention arry to write in CSV File -7 dimentions (6 for 6 parameters and 1 for date)
+                                for (int i = 0; i < ListLength; i++) {
+                                      data.add(new String[]{datelist.get(i),param1.get(i),param2.get(i),param3.get(i),param4.get(i),param5.get(i),param6.get(i)});
+                                }
+
+                                }catch(Exception e){
+                                    ListLength = param6.size();
+                                    Toast.makeText(getApplicationContext(),"PLEASE WAIT UNTIL SAVING OPERATION FINISHED", Toast.LENGTH_SHORT).show();
+                                }
+                                    try{
                                 CSVWriter writer = null;
-                                try {
+
                                     //Creating CSV FILE
                                     writer = new CSVWriter(new FileWriter(csv));
 
                                     writer.writeAll(data); // data is adding to csv
-                                    Toast.makeText(getApplicationContext(),"CSV FILE SUCCESSFULLY CREATED",Toast.LENGTH_SHORT).show();
+                                    data.clear();
+
                                     writer.close();
 
 
@@ -259,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
 
-
+                Toast.makeText(getApplicationContext(),"CSV FILE SUCCESSFULLY CREATED",Toast.LENGTH_SHORT).show();
 
 
             }
